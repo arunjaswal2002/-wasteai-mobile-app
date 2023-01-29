@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:async/async.dart';
 import 'package:dio/dio.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:google_fonts/google_fonts.dart';
+import './widgets/customButton.dart';
 
 void main() {
   runApp(MyApp());
@@ -71,17 +67,18 @@ class _LandingPageState extends State<LandingPage> {
     });
     try {
       var res = await dio.post('https://api.wasteai.co/', data: data);
+      const snackBar = SnackBar(content: Text('Yay! prediction successful!'));
       setState(() {
         _loading = false;
         prediction = res.data['prediction'];
         confidence = res.data['confidence'];
       });
-      final snackBar = SnackBar(content: Text('Yay! prediction successful!'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(res);
     } catch (e) {
-      final snackBar =
+      const snackBar =
           SnackBar(content: Text('Sorry an error occured, Try again!'));
+
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
         _loading = false;
@@ -92,6 +89,10 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    return MainScreen();
+  }
+
+  Widget MainScreen() {
     return Scaffold(
       body: Container(
           width: double.infinity,
@@ -192,24 +193,4 @@ class _LandingPageState extends State<LandingPage> {
           )),
     );
   }
-}
-
-Widget CustomButton(
-    {required String title,
-    required IconData i,
-    required VoidCallback onCLick}) {
-  return Container(
-    width: 200,
-    child: ElevatedButton(
-        onPressed: onCLick,
-        child: Row(
-          children: <Widget>[
-            Icon(i),
-            const SizedBox(
-              width: 5,
-            ),
-            Text(title),
-          ],
-        )),
-  );
 }
