@@ -1,4 +1,4 @@
-# minorproject
+# Minor Project 
 
 A new Flutter project.
 
